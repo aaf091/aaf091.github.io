@@ -412,6 +412,8 @@
       <div class="cmd-out">email-saas-api &nbsp; Running &nbsp; AWS EKS &nbsp; 4 services &nbsp; OK</div>
       <div class="cmd-line"><span class="prompt">$</span><span class="cmd-text">nsys profile --stats=true gpt2_kernel_fusion</span></div>
       <div class="cmd-out">Fusion fallacy quantified: 30x slowdown detected in naive megakernel.</div>
+      <div class="cmd-line"><span class="prompt">$</span><span class="cmd-text">cd quantlab && python wsgi.py --instruments=350k</span></div>
+      <div class="cmd-out">Bloomberg Terminal UI live on :3000 · 11 quant modules · 350k+ instruments loaded.</div>
       <div class="cmd-line"><span class="prompt">$</span><span class="cmd-text"><span class="cursor"></span></span></div>
       <div class="hero-actions">
         <a href="https://github.com/aaf091" target="_blank" class="bbg-btn primary">GITHUB</a>
@@ -697,7 +699,7 @@
     if (!tickerHalfWidth) tickerHalfWidth = ticker.scrollWidth / 2;
     pos -= 0.6;
     if (Math.abs(pos) >= tickerHalfWidth) pos = 0;
-    ticker.style.transform = 'translateX(' + pos + 'px)';
+    ticker.style.left = pos + 'px';
     requestAnimationFrame(scrollTicker);
   }
   scrollTicker();
