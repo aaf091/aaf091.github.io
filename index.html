@@ -80,20 +80,27 @@
     .topbar-ticker-wrap {
         flex: 1;
         overflow: hidden;
-        position: relative;
         height: 28px;
+        display: flex;
+        align-items: center;
     }
 
     .topbar-ticker {
+        display: flex;
+        white-space: nowrap;
+        animation: ticker-scroll 45s linear infinite;
+    }
+
+    .ticker-content {
         font-size: 11px;
         font-weight: 600;
         letter-spacing: 0.05em;
-        white-space: nowrap;
-        display: inline-block;
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        left: 0;
+        flex-shrink: 0;
+    }
+
+    @keyframes ticker-scroll {
+        0%   { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
     }
 
     .topbar-time {
@@ -373,8 +380,11 @@
 <body>
 
 <div class="topbar">
+  <div class="topbar-logo">BBG</div>
   <div class="topbar-ticker-wrap">
-    FADIA,AADIT &nbsp;|&nbsp; <span style="background:#000;color:#ff6600;padding:0 4px;">SWE</span> &nbsp;NYU TANDON &nbsp;|&nbsp; GPA 3.80 ▲ &nbsp;|&nbsp; RUST · GO · PYTHON · JAVA · C++ &nbsp;|&nbsp; AWS EKS · KUBERNETES · GRPC · CUDA &nbsp;|&nbsp; HACKNYU WINNER &nbsp;|&nbsp; SMART INDIA HACKATHON WINNER &nbsp;|&nbsp; QUANTLAB: 350K+ INSTRUMENTS · 11 QUANT MODULES &nbsp;|&nbsp; AVAILABLE MAY 2026 &nbsp;|&nbsp;
+    <div class="topbar-ticker">
+      <span class="ticker-content">FADIA,AADIT &nbsp;|&nbsp; <span style="background:#000;color:#ff6600;padding:0 4px;">SWE</span> &nbsp;NYU TANDON &nbsp;|&nbsp; GPA 3.80 ▲ &nbsp;|&nbsp; RUST · GO · PYTHON · JAVA · C++ &nbsp;|&nbsp; AWS EKS · KUBERNETES · GRPC · CUDA &nbsp;|&nbsp; HACKNYU WINNER &nbsp;|&nbsp; SMART INDIA HACKATHON WINNER &nbsp;|&nbsp; QUANTLAB: 350K+ INSTRUMENTS · 11 QUANT MODULES &nbsp;|&nbsp; AVAILABLE MAY 2026 &nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="ticker-content">FADIA,AADIT &nbsp;|&nbsp; <span style="background:#000;color:#ff6600;padding:0 4px;">SWE</span> &nbsp;NYU TANDON &nbsp;|&nbsp; GPA 3.80 ▲ &nbsp;|&nbsp; RUST · GO · PYTHON · JAVA · C++ &nbsp;|&nbsp; AWS EKS · KUBERNETES · GRPC · CUDA &nbsp;|&nbsp; HACKNYU WINNER &nbsp;|&nbsp; SMART INDIA HACKATHON WINNER &nbsp;|&nbsp; QUANTLAB: 350K+ INSTRUMENTS · 11 QUANT MODULES &nbsp;|&nbsp; AVAILABLE MAY 2026 &nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    </div>
   </div>
   <div class="topbar-time" id="clock">--:--:--</div>
 </div>
@@ -689,20 +699,20 @@
   }, { threshold: 0.05 });
   reveals.forEach(el => observer.observe(el));
 
-  // Scrolling ticker
-  const ticker = document.getElementById('ticker');
-  const origHTML = ticker.innerHTML;
-  ticker.innerHTML = origHTML + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + origHTML;
-  let pos = 0;
-  let tickerHalfWidth = null;
-  function scrollTicker() {
-    if (!tickerHalfWidth) tickerHalfWidth = ticker.scrollWidth / 2;
-    pos -= 0.6;
-    if (Math.abs(pos) >= tickerHalfWidth) pos = 0;
-    ticker.style.left = pos + 'px';
-    requestAnimationFrame(scrollTicker);
-  }
-  scrollTicker();
+//   // Scrolling ticker
+//   const ticker = document.getElementById('ticker');
+//   const origHTML = ticker.innerHTML;
+//   ticker.innerHTML = origHTML + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + origHTML;
+//   let pos = 0;
+//   let tickerHalfWidth = null;
+//   function scrollTicker() {
+//     if (!tickerHalfWidth) tickerHalfWidth = ticker.scrollWidth / 2;
+//     pos -= 0.6;
+//     if (Math.abs(pos) >= tickerHalfWidth) pos = 0;
+//     ticker.style.left = pos + 'px';
+//     requestAnimationFrame(scrollTicker);
+//   }
+//   scrollTicker();
 </script>
 </body>
 </html>
