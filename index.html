@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FADIA, AADIT — Portfolio Terminal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #000000;
+      --panel: #0a0a0a;
+      --panel2: #111111;
+      --border: #ff6600;
+      --border-dim: #3a2000;
+      --orange: #ff6600;
+      --orange-bright: #ff8833;
+      --orange-dim: #7a3000;
+      --red: #ff2222;
+      --green: #00cc44;
+      --cyan: #00ccff;
+      --yellow: #ffcc00;
+      --white: #ffffff;
+      --gray: #888888;
+      --gray-dim: #444444;
+      --text: #dddddd;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      line-height: 1.4;
+      overflow-x: hidden;
+      cursor: default;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px);
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    .topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      background: var(--orange);
+      color: #000;
+      display: flex;
+      align-items: center;
+      height: 28px;
+      padding: 0 12px;
+      overflow: hidden;
+    }
+
+    .topbar-logo {
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      background: #000;
+      color: var(--orange);
+      padding: 0 10px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      margin-right: 16px;
+      flex-shrink: 0;
+    }
+
+    .topbar-ticker {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      flex: 1;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .topbar-time {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      margin-left: 16px;
+      flex-shrink: 0;
+    }
+
+    .funcbar {
+      position: fixed;
+      top: 28px; left: 0; right: 0;
+      z-index: 200;
+      background: #1a0a00;
+      border-bottom: 2px solid var(--orange);
+      display: flex;
+      align-items: stretch;
+      height: 32px;
+    }
+
+    .func-key {
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      border-right: 1px solid var(--border-dim);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      color: var(--orange);
+      transition: background 0.1s;
+      white-space: nowrap;
+    }
+
+    .func-key:hover { background: var(--orange); color: #000; }
+    .func-key .fnum { color: var(--orange-dim); margin-right: 4px; font-size: 10px; }
+    .func-key:hover .fnum { color: #000; }
+    .func-spacer { flex: 1; }
+
+    .func-status {
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      font-size: 11px;
+      color: var(--gray);
+      border-left: 1px solid var(--border-dim);
+      gap: 16px;
+    }
+
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); display: inline-block; animation: blink 2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    .terminal-body { margin-top: 60px; min-height: calc(100vh - 82px); padding-bottom: 30px; }
+
+    .hero-panel {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      border-bottom: 1px solid var(--border-dim);
+    }
+
+    .hero-main {
+      padding: 24px;
+      border-right: 1px solid var(--border-dim);
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-dim);
+    }
+
+    .panel-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--orange);
+    }
+
+    .panel-cmd { font-size: 10px; color: var(--gray-dim); margin-left: auto; letter-spacing: 0.06em; }
+
+    .hero-name {
+      font-size: clamp(28px, 5vw, 52px);
+      font-weight: 700;
+      color: var(--orange);
+      letter-spacing: -0.02em;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .hero-subname {
+      font-size: clamp(12px, 2vw, 18px);
+      font-weight: 300;
+      color: var(--gray);
+      letter-spacing: 0.2em;
+      margin-bottom: 20px;
+    }
+
+    .hero-desc {
+      font-size: 12px;
+      color: var(--text);
+      line-height: 1.7;
+      max-width: 600px;
+      margin-bottom: 20px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 300;
+    }
+
+    .hero-desc .hl { color: var(--orange); font-weight: 500; font-family: 'IBM Plex Mono', monospace; }
+
+    .cmd-line { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+    .prompt { color: var(--orange); font-weight: 600; }
+    .cmd-text { color: var(--cyan); font-size: 12px; }
+    .cmd-out { color: var(--gray); font-size: 11px; margin-left: 20px; margin-bottom: 8px; }
+
+    .hero-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-dim);
+    }
+
+    .bbg-btn {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      padding: 5px 14px;
+      border: 1px solid var(--orange);
+      color: var(--orange);
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.1s;
+      text-transform: uppercase;
+    }
+
+    .bbg-btn:hover { background: var(--orange); color: #000; }
+    .bbg-btn.primary { background: var(--orange); color: #000; }
+    .bbg-btn.primary:hover { background: var(--orange-bright); }
+
+    .hero-stats { padding: 24px; }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 7px 0;
+      border-bottom: 1px solid #1a1a1a;
+    }
+
+    .stat-row:last-child { border-bottom: none; }
+    .stat-key { font-size: 10px; color: var(--gray); letter-spacing: 0.08em; text-transform: uppercase; }
+    .stat-val { font-size: 13px; font-weight: 600; color: var(--white); }
+    .stat-val.green { color: var(--green); }
+    .stat-val.orange { color: var(--orange); }
+    .stat-val.cyan { color: var(--cyan); }
+    .stat-val.yellow { color: var(--yellow); }
+    .stat-change { font-size: 10px; margin-left: 6px; }
+    .up { color: var(--green); }
+
+    .section-row { display: grid; border-bottom: 1px solid var(--border-dim); }
+    .section-row.cols-2 { grid-template-columns: 1fr 1fr; }
+    .section-row.full { grid-template-columns: 1fr; }
+
+    .panel { padding: 20px 24px; border-right: 1px solid var(--border-dim); }
+    .panel:last-child { border-right: none; }
+
+    .proj-table { width: 100%; border-collapse: collapse; }
+
+    .proj-table th {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--orange);
+      text-align: left;
+      padding: 6px 8px;
+      border-bottom: 1px solid var(--border-dim);
+    }
+
+    .proj-table td {
+      padding: 9px 8px;
+      border-bottom: 1px solid #111;
+      font-size: 11px;
+      vertical-align: top;
+    }
+
+    .proj-table tr:hover td { background: #0f0800; }
+
+    .proj-name { color: var(--orange); font-weight: 600; font-size: 12px; white-space: nowrap; }
+    .proj-lang { color: var(--cyan); font-size: 10px; }
+    .proj-status { font-size: 10px; }
+    .proj-status.live { color: var(--green); }
+    .proj-status.featured { color: var(--yellow); }
+    .proj-desc { color: var(--gray); font-size: 11px; line-height: 1.5; }
+
+    .tag-row { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+    .bbg-tag { font-size: 9px; letter-spacing: 0.05em; padding: 1px 5px; border: 1px solid var(--border-dim); color: var(--gray); }
+    .bbg-tag.o { border-color: var(--orange-dim); color: var(--orange); }
+    .bbg-tag.c { border-color: #003344; color: var(--cyan); }
+    .bbg-tag.g { border-color: #003322; color: var(--green); }
+    .bbg-tag.y { border-color: #332200; color: var(--yellow); }
+
+    .exp-entry { padding: 14px 0; border-bottom: 1px solid #111; }
+    .exp-entry:last-child { border-bottom: none; }
+    .exp-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; flex-wrap: wrap; gap: 4px; }
+    .exp-role-name { font-size: 12px; font-weight: 600; color: var(--white); }
+    .exp-co { color: var(--orange); font-size: 11px; }
+    .exp-period { font-size: 10px; color: var(--gray); }
+
+    .exp-bullets { list-style: none; margin-top: 6px; }
+    .exp-bullets li { font-size: 11px; color: var(--gray); padding-left: 14px; position: relative; margin-bottom: 3px; line-height: 1.5; font-family: 'IBM Plex Sans', sans-serif; font-weight: 300; }
+    .exp-bullets li::before { content: '>'; position: absolute; left: 0; color: var(--orange); font-family: 'IBM Plex Mono', monospace; }
+
+    .skill-category { margin-bottom: 16px; }
+    .skill-cat-label { font-size: 10px; color: var(--orange); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px solid var(--border-dim); }
+    .skill-pills { display: flex; flex-wrap: wrap; gap: 4px; }
+    .skill-chip { font-size: 10px; padding: 2px 7px; border: 1px solid var(--border-dim); color: var(--text); letter-spacing: 0.04em; }
+
+    .edu-entry { padding: 12px 0; border-bottom: 1px solid #111; }
+    .edu-entry:last-child { border-bottom: none; }
+    .edu-deg { font-size: 12px; font-weight: 600; color: var(--white); }
+    .edu-school { font-size: 11px; color: var(--orange); margin-top: 2px; }
+    .edu-meta { font-size: 10px; color: var(--gray); margin-top: 4px; display: flex; gap: 16px; flex-wrap: wrap; }
+    .edu-gpa { color: var(--green); }
+
+    .award-row { display: flex; align-items: baseline; gap: 8px; padding: 7px 0; border-bottom: 1px solid #111; }
+    .award-row:last-child { border-bottom: none; }
+    .award-bullet { color: var(--yellow); flex-shrink: 0; }
+    .award-text { font-size: 11px; color: var(--text); font-family: 'IBM Plex Sans', sans-serif; font-weight: 300; }
+
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+    .contact-item { padding: 10px 0; border-bottom: 1px solid #111; display: flex; gap: 12px; align-items: baseline; }
+    .contact-label { font-size: 10px; color: var(--gray); letter-spacing: 0.08em; text-transform: uppercase; min-width: 80px; }
+    .contact-val { font-size: 11px; color: var(--cyan); }
+    .contact-val:hover { color: var(--orange); }
+
+    .cursor { display: inline-block; width: 8px; height: 13px; background: var(--orange); vertical-align: middle; animation: blink 1s step-end infinite; }
+
+    .section-full { padding: 20px 24px; }
+    .proj-panel { padding: 20px 24px; }
+
+    .bottombar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 200;
+      background: var(--orange);
+      color: #000;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      gap: 24px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    .bottom-item { display: flex; gap: 6px; }
+    .bottom-key { background: #000; color: var(--orange); padding: 1px 5px; font-size: 10px; }
+
+    .reveal { opacity: 0; transform: translateY(10px); transition: opacity 0.4s ease, transform 0.4s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #000; }
+    ::-webkit-scrollbar-thumb { background: var(--orange-dim); }
+    ::-webkit-scrollbar-thumb:hover { background: var(--orange); }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-logo">BBG</div>
+  <div class="topbar-ticker" id="ticker">
+    FADIA,AADIT &nbsp;|&nbsp; <span style="background:#000;color:#ff6600;padding:0 4px;">SWE</span> &nbsp;NYU TANDON &nbsp;|&nbsp; GPA 3.80 ▲ &nbsp;|&nbsp; RUST · GO · PYTHON · JAVA · C++ &nbsp;|&nbsp; AWS EKS · KUBERNETES · GRPC · CUDA &nbsp;|&nbsp; HACKNYU WINNER &nbsp;|&nbsp; SMART INDIA HACKATHON WINNER &nbsp;|&nbsp; QUANTLAB: 350K+ INSTRUMENTS · 11 QUANT MODULES &nbsp;|&nbsp; AVAILABLE MAY 2026 &nbsp;|&nbsp;
+  </div>
+  <div class="topbar-time" id="clock">--:--:--</div>
+</div>
+
+<div class="funcbar">
+  <a href="#projects" class="func-key"><span class="fnum">F2</span>PROJECTS</a>
+  <a href="#experience" class="func-key"><span class="fnum">F3</span>EXPERIENCE</a>
+  <a href="#skills" class="func-key"><span class="fnum">F4</span>SKILLS</a>
+  <a href="#education" class="func-key"><span class="fnum">F5</span>EDUCATION</a>
+  <a href="#contact" class="func-key"><span class="fnum">F8</span>CONTACT</a>
+  <div class="func-spacer"></div>
+  <div class="func-status">
+    <span><span class="status-dot"></span> LIVE</span>
+    <span>NEW YORK, NY</span>
+    <span style="color:var(--orange)">OPEN TO WORK</span>
+  </div>
+</div>
+
+<div class="terminal-body">
+
+  <div class="hero-panel">
+    <div class="hero-main">
+      <div class="panel-header">
+        <span class="panel-title">PORTFOLIO OVERVIEW</span>
+        <span class="panel-cmd">EQUITY &lt;GO&gt;</span>
+      </div>
+      <div class="hero-name">AADIT FADIA</div>
+      <div class="hero-subname">SOFTWARE ENGINEER</div>
+      <p class="hero-desc">
+        M.S. Computer Engineering at <span class="hl">NYU Tandon</span> (GPA: 3.8). Building high-performance systems at the intersection of <span class="hl">distributed infrastructure</span>, <span class="hl">GPU computing</span>, and <span class="hl">AI</span>. Previously at <span class="hl">Citicorp</span>. Two-time hackathon winner.
+      </p>
+      <div class="cmd-line"><span class="prompt">$</span><span class="cmd-text">git clone https://github.com/aaf091/logflow</span></div>
+      <div class="cmd-out">Cloning Rust+Go distributed log aggregation pipeline... done.</div>
+      <div class="cmd-line"><span class="prompt">$</span><span class="cmd-text">kubectl get pods --namespace=production</span></div>
+      <div class="cmd-out">email-saas-api &nbsp; Running &nbsp; AWS EKS &nbsp; 4 services &nbsp; OK</div>
+      <div class="cmd-line"><span class="prompt">$</span><span class="cmd-text">nsys profile --stats=true gpt2_kernel_fusion</span></div>
+      <div class="cmd-out">Fusion fallacy quantified: 30x slowdown detected in naive megakernel.</div>
+      <div class="cmd-line"><span class="prompt">$</span><span class="cmd-text"><span class="cursor"></span></span></div>
+      <div class="hero-actions">
+        <a href="https://github.com/aaf091" target="_blank" class="bbg-btn primary">GITHUB</a>
+        <a href="https://www.linkedin.com/in/aadit-anand-fadia" target="_blank" class="bbg-btn">LINKEDIN</a>
+        <a href="mailto:aaf9407@nyu.edu" class="bbg-btn">EMAIL</a>
+        <a href="tel:+19296150362" class="bbg-btn">+1 929 615 0362</a>
+      </div>
+    </div>
+
+    <div class="hero-stats">
+      <div class="panel-header">
+        <span class="panel-title">KEY METRICS</span>
+        <span class="panel-cmd">FA &lt;GO&gt;</span>
+      </div>
+      <div class="stat-row"><span class="stat-key">GPA (NYU)</span><span class="stat-val green">3.80 <span class="stat-change up">▲ +0.30</span></span></div>
+      <div class="stat-row"><span class="stat-key">STATUS</span><span class="stat-val orange">OPEN TO WORK</span></div>
+      <div class="stat-row"><span class="stat-key">AVAIL DATE</span><span class="stat-val">MAY 2026</span></div>
+      <div class="stat-row"><span class="stat-key">LOCATION</span><span class="stat-val">NEW YORK, NY</span></div>
+      <div class="stat-row"><span class="stat-key">VISA</span><span class="stat-val cyan">F-1 OPT</span></div>
+      <div class="stat-row"><span class="stat-key">PROJECTS</span><span class="stat-val orange">8 <span class="stat-change up">▲ SHIPPED</span></span></div>
+      <div class="stat-row"><span class="stat-key">HACKATHONS</span><span class="stat-val yellow">2x WINNER</span></div>
+      <div class="stat-row"><span class="stat-key">EXPERIENCE</span><span class="stat-val">3+ YRS</span></div>
+      <div class="stat-row"><span class="stat-key">CUDA LEVEL</span><span class="stat-val cyan">KERNEL</span></div>
+      <div class="stat-row"><span class="stat-key">PRIMARY LANG</span><span class="stat-val orange">RUST / GO / PY</span></div>
+      <div class="stat-row"><span class="stat-key">CLOUD</span><span class="stat-val">AWS EKS/ECS/LAM</span></div>
+      <div class="stat-row"><span class="stat-key">PREV EMPLOYER</span><span class="stat-val">CITICORP</span></div>
+    </div>
+  </div>
+
+  <div id="projects" class="section-row full">
+    <div class="proj-panel reveal">
+      <div class="panel-header">
+        <span class="panel-title">PROJECT HOLDINGS</span>
+        <span class="panel-cmd">PORT &lt;GO&gt;</span>
+      </div>
+      <table class="proj-table">
+        <thead>
+          <tr>
+            <th style="width:200px">PROJECT</th>
+            <th style="width:110px">STACK</th>
+            <th style="width:90px">STATUS</th>
+            <th>DESCRIPTION + TAGS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <a href="https://github.com/aaf091/logflow" target="_blank">
+                <div class="proj-name">LOGFLOW ★</div>
+                <div style="font-size:9px;color:var(--yellow);margin-top:2px;">FEATURED · NEW</div>
+              </a>
+            </td>
+            <td><span class="proj-lang">RUST · GO</span></td>
+            <td><span class="proj-status live">● LIVE</span></td>
+            <td>
+              <div class="proj-desc">High-performance distributed log aggregation pipeline. Rust agent tails files, parses JSON/plaintext, batches and ships via gRPC + protobuf to Go aggregation server. SQLite persistence, real-time web dashboard.</div>
+              <div class="tag-row"><span class="bbg-tag o">RUST</span><span class="bbg-tag o">GO</span><span class="bbg-tag c">gRPC</span><span class="bbg-tag c">PROTOBUF</span><span class="bbg-tag">TOKIO</span><span class="bbg-tag">SQLITE</span><span class="bbg-tag">DOCKER</span></div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <a href="https://github.com/aaf091/quantlab" target="_blank">
+                <div class="proj-name">QUANTLAB ★</div>
+                <div style="font-size:9px;color:var(--yellow);margin-top:2px;">FEATURED</div>
+              </a>
+            </td>
+            <td><span class="proj-lang">PY · TS · REACT</span></td>
+            <td><span class="proj-status live">● LIVE</span></td>
+            <td>
+              <div class="proj-desc">Bloomberg Terminal-style quantitative finance platform. Flask REST API with 350k+ instrument SQLite database, 11 live quant analysis modules (Markowitz optimizer, Monte Carlo options pricer, pairs trading, VaR, ML price predictor), interactive OHLCV candlestick charts, sector heatmap, correlation matrix, and 6 draggable floating panels.</div>
+              <div class="tag-row"><span class="bbg-tag o">FLASK</span><span class="bbg-tag c">REACT</span><span class="bbg-tag c">TYPESCRIPT</span><span class="bbg-tag">SQLITE</span><span class="bbg-tag">SQLALCHEMY</span><span class="bbg-tag">SCIKIT-LEARN</span><span class="bbg-tag">YFINANCE</span><span class="bbg-tag o">350K+ INSTRUMENTS</span><span class="bbg-tag g">11 QUANT MODULES</span></div>
+            </td>
+          </tr>
+          <tr>
+            <td><div class="proj-name">AI EMAIL SAAS</div></td>
+            <td><span class="proj-lang">PY · TS · K8S</span></td>
+            <td><span class="proj-status live">● LIVE</span></td>
+            <td>
+              <div class="proj-desc">Production microservices platform on AWS EKS — 4 independently scalable services. Real-time Gmail/Outlook sync, vector semantic search, RAG-powered AI email drafting with streaming responses.</div>
+              <div class="tag-row"><span class="bbg-tag o">AWS EKS</span><span class="bbg-tag">FASTAPI</span><span class="bbg-tag c">NEXT.JS</span><span class="bbg-tag">POSTGRESQL</span><span class="bbg-tag">OPENAI</span><span class="bbg-tag">KUBERNETES</span></div>
+            </td>
+          </tr>
+          <tr>
+            <td><div class="proj-name">GPT-2 KERNEL FUSION</div></td>
+            <td><span class="proj-lang">CUDA · TRITON</span></td>
+            <td><span class="proj-status featured">◆ RESEARCH</span></td>
+            <td>
+              <div class="proj-desc">Benchmarked kernel fusion strategies on NVIDIA A100. Quantified the "fusion fallacy" — demonstrated 30x slowdowns from naive deep fusion. Profiled via Nsight Systems: latency, bandwidth, occupancy.</div>
+              <div class="tag-row"><span class="bbg-tag o">CUDA</span><span class="bbg-tag o">TRITON</span><span class="bbg-tag c">PYTORCH</span><span class="bbg-tag">A100</span><span class="bbg-tag">NSIGHT</span></div>
+            </td>
+          </tr>
+          <tr>
+            <td><div class="proj-name">LIFE CONTEXT API</div></td>
+            <td><span class="proj-lang">PY · AWS</span></td>
+            <td><span class="proj-status live">● LIVE</span></td>
+            <td>
+              <div class="proj-desc">Self-hosted 24/7 audio lifelogging system. Multilingual Whisper ASR pipeline, speaker diarization, GPS-correlated behavioral analytics. Queryable memory API with semantic search over past conversations.</div>
+              <div class="tag-row"><span class="bbg-tag">WHISPER</span><span class="bbg-tag">FASTAPI</span><span class="bbg-tag">POSTGRESQL</span><span class="bbg-tag c">AWS</span><span class="bbg-tag">LIBROSA</span></div>
+            </td>
+          </tr>
+          <tr>
+            <td><div class="proj-name">AUTOTRUST <span style="color:var(--yellow)">★</span></div></td>
+            <td><span class="proj-lang">SOLANA · TS</span></td>
+            <td><span class="proj-status featured">◆ WINNER</span></td>
+            <td>
+              <div class="proj-desc">Full-stack decentralized marketplace on Solana built in 36 hours. Won top distinction at HackNYU (MLH) among 200+ participants. Trustless vehicle transactions via smart contracts.</div>
+              <div class="tag-row"><span class="bbg-tag o">SOLANA</span><span class="bbg-tag c">REACT</span><span class="bbg-tag c">NEXT.JS</span><span class="bbg-tag g">HACKNYU WINNER</span></div>
+            </td>
+          </tr>
+          <tr>
+            <td><div class="proj-name">HW SECURITY</div></td>
+            <td><span class="proj-lang">C · ARM · PY</span></td>
+            <td><span class="proj-status featured">◆ RESEARCH</span></td>
+            <td>
+              <div class="proj-desc">Bypassed Memory Readout Protection on drone controllers via fault injection. Defeated AES-256 via Differential Power Analysis on ARM embedded devices. Built OpenOCD/GDB Python automation framework.</div>
+              <div class="tag-row"><span class="bbg-tag o">DPA</span><span class="bbg-tag">ARM</span><span class="bbg-tag">GDB</span><span class="bbg-tag">OPENOCD</span><span class="bbg-tag">AES-256</span></div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section-row cols-2">
+    <div id="experience" class="panel reveal">
+      <div class="panel-header">
+        <span class="panel-title">EMPLOYMENT HISTORY</span>
+        <span class="panel-cmd">RSKC &lt;GO&gt;</span>
+      </div>
+      <div class="exp-entry">
+        <div class="exp-top">
+          <span class="exp-role-name">GRADUATE RESEARCH ASSISTANT</span>
+          <span class="exp-period">SEP 2024 – JAN 2025</span>
+        </div>
+        <div class="exp-co">NYU TANDON SCHOOL OF ENGINEERING · NEW YORK, NY</div>
+        <ul class="exp-bullets">
+          <li>Cryptographic detection systems in Python processing 10,000+ test vectors — boosted accuracy 40%</li>
+          <li>Parallel verification workflows cutting analysis time 60%, eliminating 200+ manual hrs/quarter</li>
+        </ul>
+      </div>
+      <div class="exp-entry">
+        <div class="exp-top">
+          <span class="exp-role-name">SOFTWARE ENGINEERING INTERN</span>
+          <span class="exp-period">MAY – JUL 2023</span>
+        </div>
+        <div class="exp-co">CITICORP SERVICES INDIA · PUNE, INDIA</div>
+        <ul class="exp-bullets">
+          <li>Full-stack platform (Java + Spring MVC) processing 2,000+ daily transactions, 3 global regions</li>
+          <li>Low-latency REST APIs + LDAP/SSO — cut auth response time 35% for 500+ concurrent users</li>
+          <li>Compliance automation saving 1,500+ analyst hours annually (-92.8% manual review time)</li>
+        </ul>
+      </div>
+      <div class="exp-entry">
+        <div class="exp-top">
+          <span class="exp-role-name">UNDERGRADUATE RESEARCH INTERN</span>
+          <span class="exp-period">DEC 2022 – JUN 2024</span>
+        </div>
+        <div class="exp-co">CENTER OF EXCELLENCE, VJTI · MUMBAI, INDIA</div>
+        <ul class="exp-bullets">
+          <li>Real-time data ingestion pipelines reducing manual testing overhead 85%</li>
+          <li>Testing frameworks processing 500+ daily data streams — QA throughput 3x</li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="skills" class="panel reveal">
+      <div class="panel-header">
+        <span class="panel-title">TECHNICAL INVENTORY</span>
+        <span class="panel-cmd">TECH &lt;GO&gt;</span>
+      </div>
+      <div class="skill-category">
+        <div class="skill-cat-label">LANGUAGES</div>
+        <div class="skill-pills"><span class="skill-chip">RUST</span><span class="skill-chip">GO</span><span class="skill-chip">PYTHON</span><span class="skill-chip">JAVA</span><span class="skill-chip">C/C++</span><span class="skill-chip">TYPESCRIPT</span><span class="skill-chip">SQL</span><span class="skill-chip">BASH</span></div>
+      </div>
+      <div class="skill-category">
+        <div class="skill-cat-label">CLOUD & DEVOPS</div>
+        <div class="skill-pills"><span class="skill-chip">AWS EKS</span><span class="skill-chip">LAMBDA</span><span class="skill-chip">S3</span><span class="skill-chip">DYNAMODB</span><span class="skill-chip">SQS</span><span class="skill-chip">DOCKER</span><span class="skill-chip">KUBERNETES</span><span class="skill-chip">TERRAFORM</span><span class="skill-chip">CI/CD</span></div>
+      </div>
+      <div class="skill-category">
+        <div class="skill-cat-label">FRAMEWORKS</div>
+        <div class="skill-pills"><span class="skill-chip">SPRING BOOT</span><span class="skill-chip">FASTAPI</span><span class="skill-chip">NEXT.JS</span><span class="skill-chip">REACT</span><span class="skill-chip">GRPC</span><span class="skill-chip">KAFKA</span><span class="skill-chip">TRPC</span><span class="skill-chip">DJANGO</span></div>
+      </div>
+      <div class="skill-category">
+        <div class="skill-cat-label">DATA & ML</div>
+        <div class="skill-pills"><span class="skill-chip">POSTGRESQL</span><span class="skill-chip">MONGODB</span><span class="skill-chip">REDIS</span><span class="skill-chip">OPENSEARCH</span><span class="skill-chip">PYTORCH</span><span class="skill-chip">TENSORFLOW</span><span class="skill-chip">RAG</span><span class="skill-chip">WHISPER</span></div>
+      </div>
+      <div class="skill-category">
+        <div class="skill-cat-label">GPU & PERFORMANCE</div>
+        <div class="skill-pills"><span class="skill-chip">CUDA KERNELS</span><span class="skill-chip">TRITON</span><span class="skill-chip">KERNEL FUSION</span><span class="skill-chip">DDP</span><span class="skill-chip">NSIGHT SYSTEMS</span><span class="skill-chip">MEM BANDWIDTH OPT</span></div>
+      </div>
+      <div class="skill-category">
+        <div class="skill-cat-label">SYSTEMS</div>
+        <div class="skill-pills"><span class="skill-chip">TOKIO</span><span class="skill-chip">TONIC</span><span class="skill-chip">PROTOBUF</span><span class="skill-chip">MICROSERVICES</span><span class="skill-chip">EVENT-DRIVEN</span><span class="skill-chip">PRISMA</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-row cols-2">
+    <div id="education" class="panel reveal">
+      <div class="panel-header">
+        <span class="panel-title">EDUCATION</span>
+        <span class="panel-cmd">EDU &lt;GO&gt;</span>
+      </div>
+      <div class="edu-entry">
+        <div class="edu-deg">M.S. COMPUTER ENGINEERING</div>
+        <div class="edu-school">NEW YORK UNIVERSITY — TANDON SCHOOL OF ENGINEERING</div>
+        <div class="edu-meta"><span>SEP 2024 – MAY 2026</span><span class="edu-gpa">GPA: 3.80 / 4.00 ▲</span><span>NEW YORK, NY</span></div>
+      </div>
+      <div class="edu-entry">
+        <div class="edu-deg">B.TECH ELECTRONICS ENGINEERING</div>
+        <div class="edu-school">VJTI MUMBAI</div>
+        <div class="edu-meta"><span>AUG 2020 – MAY 2024</span><span class="edu-gpa">GPA: 3.50 / 4.00</span><span>MUMBAI, INDIA</span></div>
+      </div>
+    </div>
+    <div class="panel reveal">
+      <div class="panel-header">
+        <span class="panel-title">AWARDS & LEADERSHIP</span>
+        <span class="panel-cmd">AWD &lt;GO&gt;</span>
+      </div>
+      <div class="award-row"><span class="award-bullet">★</span><span class="award-text">Winner — Smart India Hackathon 2023 (National · Ministry of Education · Govt. of India)</span></div>
+      <div class="award-row"><span class="award-bullet">★</span><span class="award-text">Winner — HackNYU 2025 (MLH) · Top distinction among 200+ participants</span></div>
+      <div class="award-row"><span class="award-bullet">◆</span><span class="award-text">Graduate TA — Machine Learning, NYU Tandon · Mentored 150+ graduate students</span></div>
+      <div class="award-row"><span class="award-bullet">◆</span><span class="award-text">Recitation Leader — Calculus I/II, NYU Courant · Weekly sessions for 60 students</span></div>
+    </div>
+  </div>
+
+  <div id="contact" class="section-row full">
+    <div class="section-full reveal">
+      <div class="panel-header">
+        <span class="panel-title">CONTACT & LINKS</span>
+        <span class="panel-cmd">MSG &lt;GO&gt;</span>
+      </div>
+      <div class="contact-grid">
+        <a href="mailto:aaf9407@nyu.edu" class="contact-item"><span class="contact-label">EMAIL</span><span class="contact-val">aaf9407@nyu.edu</span></a>
+        <a href="tel:+19296150362" class="contact-item"><span class="contact-label">PHONE</span><span class="contact-val">+1 (929) 615-0362</span></a>
+        <a href="https://www.linkedin.com/in/aadit-anand-fadia" target="_blank" class="contact-item"><span class="contact-label">LINKEDIN</span><span class="contact-val">linkedin.com/in/aadit-anand-fadia ↗</span></a>
+        <a href="https://github.com/aaf091" target="_blank" class="contact-item"><span class="contact-label">GITHUB</span><span class="contact-val">github.com/aaf091 ↗</span></a>
+        <a href="https://aaf091.github.io" target="_blank" class="contact-item"><span class="contact-label">PORTFOLIO</span><span class="contact-val">aaf091.github.io ↗</span></a>
+        <div class="contact-item"><span class="contact-label">LOCATION</span><span class="contact-val" style="color:var(--text)">NEW YORK, NY · OPEN TO RELOCATION</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="bottombar">
+  <span class="bottom-item"><span class="bottom-key">F2</span> PROJECTS</span>
+  <span class="bottom-item"><span class="bottom-key">F3</span> EXPERIENCE</span>
+  <span class="bottom-item"><span class="bottom-key">F4</span> SKILLS</span>
+  <span class="bottom-item"><span class="bottom-key">F5</span> EDUCATION</span>
+  <span class="bottom-item"><span class="bottom-key">F8</span> CONTACT</span>
+  <span style="margin-left:auto;font-size:10px;letter-spacing:0.06em;">AADIT FADIA PORTFOLIO TERMINAL v1.0 · NYC · MAY 2026</span>
+</div>
+
+<script>
+  function updateClock() {
+    const now = new Date();
+    const t = now.toLocaleTimeString('en-US', { hour12: false, hour:'2-digit', minute:'2-digit', second:'2-digit' });
+    document.getElementById('clock').textContent = t + ' ET';
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.05 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Scrolling ticker
+  const ticker = document.getElementById('ticker');
+  const origHTML = ticker.innerHTML;
+  ticker.innerHTML = origHTML + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + origHTML;
+  let pos = 0;
+  function scrollTicker() {
+    pos -= 0.6;
+    if (Math.abs(pos) > ticker.scrollWidth / 2) pos = 0;
+    ticker.style.transform = 'translateX(' + pos + 'px)';
+    requestAnimationFrame(scrollTicker);
+  }
+  scrollTicker();
+</script>
+</body>
+</html>
