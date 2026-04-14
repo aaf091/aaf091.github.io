@@ -78,29 +78,29 @@
     }
 
     .topbar-ticker-wrap {
-        flex: 1;
-        overflow: hidden;
-        height: 28px;
-        display: flex;
-        align-items: center;
+      flex: 1;
+      overflow: hidden;
+      height: 28px;
+      display: flex;
+      align-items: center;
     }
 
     .topbar-ticker {
-        display: flex;
-        white-space: nowrap;
-        animation: ticker-scroll 45s linear infinite;
+      display: flex;
+      white-space: nowrap;
+      animation: ticker-scroll 55s linear infinite;
     }
 
     .ticker-content {
-        font-size: 11px;
-        font-weight: 600;
-        letter-spacing: 0.05em;
-        flex-shrink: 0;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      flex-shrink: 0;
     }
 
     @keyframes ticker-scroll {
-        0%   { transform: translateX(0); }
-        100% { transform: translateX(-50%); }
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
     }
 
     .topbar-time {
@@ -186,6 +186,45 @@
 
     .panel-cmd { font-size: 10px; color: var(--gray-dim); margin-left: auto; letter-spacing: 0.06em; }
 
+    /* ── Photo + name row ── */
+    .hero-identity {
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+
+    .hero-avatar {
+      width: 82px;
+      height: 82px;
+      border-radius: 50%;
+      border: 2px solid var(--orange);
+      object-fit: cover;
+      object-position: center top;
+      flex-shrink: 0;
+      /* orange tint via CSS filter — remove if you prefer natural colour */
+      filter: grayscale(20%) sepia(20%) saturate(120%);
+    }
+
+    /* Fallback placeholder shown when no photo is provided */
+    .hero-avatar-placeholder {
+      width: 82px;
+      height: 82px;
+      border-radius: 50%;
+      border: 2px solid var(--orange);
+      background: #1a0a00;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--orange);
+      letter-spacing: -1px;
+    }
+
+    .hero-name-block { display: flex; flex-direction: column; justify-content: center; }
+
     .hero-name {
       font-size: clamp(28px, 5vw, 52px);
       font-weight: 700;
@@ -200,7 +239,6 @@
       font-weight: 300;
       color: var(--gray);
       letter-spacing: 0.2em;
-      margin-bottom: 20px;
     }
 
     .hero-desc {
@@ -383,7 +421,7 @@
   <div class="topbar-logo"></div>
   <div class="topbar-ticker-wrap">
     <div class="topbar-ticker">
-      <span class="ticker-content">FADIA,AADIT &nbsp;|&nbsp; <span style="background:#000;color:#ff6600;padding:0 4px;">SWE</span> &nbsp;NYU TANDON &nbsp;|&nbsp; GPA 3.80 ▲ &nbsp;|&nbsp; PYTHON · JAVA · C++ · RUST · GO · &nbsp;|&nbsp; AWS EKS · KUBERNETES · GRPC · CUDA &nbsp;|&nbsp; HACKNYU WINNER &nbsp;|&nbsp; SMART INDIA HACKATHON WINNER &nbsp;|&nbsp; QUANTLAB: 350K+ INSTRUMENTS · 11 QUANT MODULES &nbsp;|&nbsp; AVAILABLE MAY 2026 &nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="ticker-content">FADIA,AADIT &nbsp;|&nbsp; <span style="background:#000;color:#ff6600;padding:0 4px;">SWE</span> &nbsp;NYU TANDON &nbsp;|&nbsp; GPA 3.80 ▲ &nbsp;|&nbsp; RUST · GO · PYTHON · JAVA · C++ &nbsp;|&nbsp; AWS EKS · KUBERNETES · GRPC · CUDA &nbsp;|&nbsp; HACKNYU WINNER &nbsp;|&nbsp; SMART INDIA HACKATHON WINNER &nbsp;|&nbsp; QUANTLAB: 350K+ INSTRUMENTS · 11 QUANT MODULES &nbsp;|&nbsp; AVAILABLE MAY 2026 &nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+      <span class="ticker-content">FADIA,AADIT &nbsp;|&nbsp; <span style="background:#000;color:#ff6600;padding:0 4px;">SWE</span> &nbsp;NYU TANDON &nbsp;|&nbsp; GPA 3.80 ▲ &nbsp;|&nbsp; PYTHON · JAVA · C++ · RUST · GO &nbsp;|&nbsp; AWS EKS · KUBERNETES · GRPC · CUDA &nbsp;|&nbsp; HACKNYU WINNER &nbsp;|&nbsp; SMART INDIA HACKATHON WINNER &nbsp;|&nbsp; QUANTLAB: 350K+ INSTRUMENTS · 11 QUANT MODULES &nbsp;|&nbsp; PAY-WATCH: AUC 0.9477 · 590K+ TXN &nbsp;|&nbsp; CONDUIT: KAFKA-INSPIRED BROKER IN GO &nbsp;|&nbsp; LEXAGENT: CONTRACT ANALYSIS AI &nbsp;|&nbsp; AVAILABLE MAY 2026 &nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="ticker-content">FADIA,AADIT &nbsp;|&nbsp; <span style="background:#000;color:#ff6600;padding:0 4px;">SWE</span> &nbsp;NYU TANDON &nbsp;|&nbsp; GPA 3.80 ▲ &nbsp;|&nbsp; RUST · GO · PYTHON · JAVA · C++ &nbsp;|&nbsp; AWS EKS · KUBERNETES · GRPC · CUDA &nbsp;|&nbsp; HACKNYU WINNER &nbsp;|&nbsp; SMART INDIA HACKATHON WINNER &nbsp;|&nbsp; QUANTLAB: 350K+ INSTRUMENTS · 11 QUANT MODULES &nbsp;|&nbsp; PAY-WATCH: AUC 0.9477 · 590K+ TXN &nbsp;|&nbsp; CONDUIT: KAFKA-INSPIRED BROKER IN GO &nbsp;|&nbsp; LEXAGENT: CONTRACT ANALYSIS AI &nbsp;|&nbsp; AVAILABLE MAY 2026 &nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
     </div>
   </div>
   <div class="topbar-time" id="clock">--:--:--</div>
@@ -411,17 +449,31 @@
         <span class="panel-title">PORTFOLIO OVERVIEW</span>
         <span class="panel-cmd">EQUITY &lt;GO&gt;</span>
       </div>
-      <div class="hero-name">AADIT FADIA</div>
-      <div class="hero-subname">SOFTWARE ENGINEER</div>
+
+      <!-- PHOTO + NAME ROW -->
+      <div class="hero-identity">
+        <!--
+          TO ADD YOUR PHOTO:
+          1. Add your photo to your GitHub repo at: assets/photo.jpg
+          2. Replace the placeholder div below with:
+             <img src="assets/photo.jpg" alt="Aadit Fadia" class="hero-avatar" />
+        -->
+        <div class="hero-avatar-placeholder">AF</div>
+        <div class="hero-name-block">
+          <div class="hero-name">AADIT FADIA</div>
+          <div class="hero-subname">SOFTWARE ENGINEER</div>
+        </div>
+      </div>
+
       <p class="hero-desc">
         M.S. Computer Engineering at <span class="hl">New York University</span> (GPA: 3.8). Building high-performance systems at the intersection of <span class="hl">distributed infrastructure</span>, <span class="hl">GPU computing</span>, and <span class="hl">AI</span>. Previously at <span class="hl">Citi</span>. Two-time hackathon winner.
       </p>
-      <div class="cmd-line"><span class="prompt">$</span><span class="cmd-text">git clone https://github.com/aaf091/logflow</span></div>
-      <div class="cmd-out">Cloning Rust+Go distributed log aggregation pipeline... done.</div>
-      <div class="cmd-line"><span class="prompt">$</span><span class="cmd-text">kubectl get pods --namespace=production</span></div>
-      <div class="cmd-out">email-saas-api &nbsp; Running &nbsp; AWS EKS &nbsp; 4 services &nbsp; OK</div>
-      <div class="cmd-line"><span class="prompt">$</span><span class="cmd-text">nsys profile --stats=true gpt2_kernel_fusion</span></div>
-      <div class="cmd-out">Fusion fallacy quantified: 30x slowdown detected in naive megakernel.</div>
+      <div class="cmd-line"><span class="prompt">$</span><span class="cmd-text">git clone https://github.com/aaf091/conduit && cd conduit && go test ./... -race</span></div>
+      <div class="cmd-out">8 tests passing · partition · broker · protocol · zero external deps.</div>
+      <div class="cmd-line"><span class="prompt">$</span><span class="cmd-text">python pay-watch/api.py --model xgboost</span></div>
+      <div class="cmd-out">AUC 0.9477 · SHAP loaded · Groq LLaMA narrative layer ready · 590K txn.</div>
+      <div class="cmd-line"><span class="prompt">$</span><span class="cmd-text">python lexagent/scripts/analyse_contract.py --demo</span></div>
+      <div class="cmd-out">M&A NDA parsed · 3 HIGH risk flags · constitutional provisions linked · QA bot ready.</div>
       <div class="cmd-line"><span class="prompt">$</span><span class="cmd-text">cd quantlab && python wsgi.py --instruments=350k</span></div>
       <div class="cmd-out">Bloomberg Terminal UI live on :3000 · 11 quant modules · 350k+ instruments loaded.</div>
       <div class="cmd-line"><span class="prompt">$</span><span class="cmd-text"><span class="cursor"></span></span></div>
@@ -443,9 +495,9 @@
       <div class="stat-row"><span class="stat-key">AVAIL DATE</span><span class="stat-val">JUNE 2026</span></div>
       <div class="stat-row"><span class="stat-key">LOCATION</span><span class="stat-val">NEW YORK, NY</span></div>
       <div class="stat-row"><span class="stat-key">VISA</span><span class="stat-val cyan">F-1 OPT</span></div>
-      <div class="stat-row"><span class="stat-key">PROJECTS</span><span class="stat-val orange">8 <span class="stat-change up">▲ SHIPPED</span></span></div>
+      <div class="stat-row"><span class="stat-key">PROJECTS</span><span class="stat-val orange">12 <span class="stat-change up">▲ SHIPPED</span></span></div>
       <div class="stat-row"><span class="stat-key">HACKATHONS</span><span class="stat-val yellow">2x WINNER</span></div>
-      <div class="stat-row"><span class="stat-key">EXPERIENCE(Internship+Research)</span><span class="stat-val">3+ YRS</span></div>
+      <div class="stat-row"><span class="stat-key">EXPERIENCE</span><span class="stat-val">3+ YRS</span></div>
       <div class="stat-row"><span class="stat-key">CUDA LEVEL</span><span class="stat-val cyan">KERNEL</span></div>
       <div class="stat-row"><span class="stat-key">PRIMARY LANG</span><span class="stat-val orange">RUST / GO / PY</span></div>
       <div class="stat-row"><span class="stat-key">CLOUD</span><span class="stat-val">AWS EKS/ECS/LAM</span></div>
@@ -462,27 +514,109 @@
       <table class="proj-table">
         <thead>
           <tr>
-            <th style="width:200px">PROJECT</th>
-            <th style="width:110px">STACK</th>
+            <th style="width:180px">PROJECT</th>
+            <th style="width:120px">STACK</th>
             <th style="width:90px">STATUS</th>
             <th>DESCRIPTION + TAGS</th>
           </tr>
         </thead>
         <tbody>
+
+          <!-- PAY-WATCH -->
+          <tr>
+            <td>
+              <a href="https://github.com/aaf091/pay-watch" target="_blank">
+                <div class="proj-name">PAY-WATCH ★</div>
+                <div style="font-size:9px;color:var(--yellow);margin-top:2px;">FEATURED · AI/ML</div>
+              </a>
+            </td>
+            <td><span class="proj-lang">PY · FASTAPI · DOCKER</span></td>
+            <td><span class="proj-status live">● LIVE</span></td>
+            <td>
+              <div class="proj-desc">End-to-end financial transaction intelligence pipeline on 590K+ records. Benchmarked GLM, XGBoost (AUC 0.9477), and PyTorch NN (AUC 0.9210) with bootstrapped 95% CIs and SHAP feature attribution. Groq LLaMA narrative layer auto-generates plain-English analyst alerts from model outputs — making quantitative signals legible without domain expertise.</div>
+              <div class="tag-row"><span class="bbg-tag o">XGBOOST</span><span class="bbg-tag o">PYTORCH</span><span class="bbg-tag o">SHAP</span><span class="bbg-tag c">GROQ LLAMA</span><span class="bbg-tag c">RAG</span><span class="bbg-tag">FASTAPI</span><span class="bbg-tag">DOCKER</span><span class="bbg-tag g">AUC 0.9477</span><span class="bbg-tag g">590K TXN</span></div>
+            </td>
+          </tr>
+
+          <!-- CONDUIT -->
+          <tr>
+            <td>
+              <a href="https://github.com/aaf091/conduit" target="_blank">
+                <div class="proj-name">CONDUIT ★</div>
+                <div style="font-size:9px;color:var(--yellow);margin-top:2px;">FEATURED · SYSTEMS</div>
+              </a>
+            </td>
+            <td><span class="proj-lang">GO</span></td>
+            <td><span class="proj-status live">● LIVE</span></td>
+            <td>
+              <div class="proj-desc">Kafka-inspired distributed message broker built from scratch in Go. Custom binary wire protocol, persistent partitioned append-only log, consumer group coordination with heartbeat-driven rebalancing, zero-copy fetch via sendfile(2), idempotent producer semantics — zero external dependencies. Ships an intelligent consumer agent powered by Claude: subscribes to an input topic, reasons over messages with a sliding context window, produces structured JSON decisions downstream.</div>
+              <div class="tag-row"><span class="bbg-tag o">GO</span><span class="bbg-tag c">BINARY PROTOCOL</span><span class="bbg-tag c">CONSUMER GROUPS</span><span class="bbg-tag">SENDFILE(2)</span><span class="bbg-tag">IDEMPOTENT</span><span class="bbg-tag c">CLAUDE API</span><span class="bbg-tag">DOCKER</span></div>
+            </td>
+          </tr>
+
+          <!-- LEXAGENT -->
+          <tr>
+            <td>
+              <a href="https://github.com/aaf091/lexagent" target="_blank">
+                <div class="proj-name">LEXAGENT ★</div>
+                <div style="font-size:9px;color:var(--yellow);margin-top:2px;">FEATURED · AI/LEGAL</div>
+              </a>
+            </td>
+            <td><span class="proj-lang">PY · FASTAPI</span></td>
+            <td><span class="proj-status featured">◆ RESEARCH</span></td>
+            <td>
+              <div class="proj-desc">AI-powered contract analysis platform for M&A and legal due diligence. Four-stage pipeline: chunk → trie pre-screen → RAG context retrieval (Pinecone + US Constitutional/statutory corpus) → Claude-powered risk scoring. Outputs structured RiskFlag objects with severity levels cross-referenced against constitutional provisions and federal statutes. Interactive QA bot layer for natural-language contract queries.</div>
+              <div class="tag-row"><span class="bbg-tag o">CLAUDE API</span><span class="bbg-tag c">RAG</span><span class="bbg-tag c">PINECONE</span><span class="bbg-tag">FASTAPI</span><span class="bbg-tag">NLP</span><span class="bbg-tag o">M&A</span><span class="bbg-tag o">CONTRACT ANALYSIS</span></div>
+            </td>
+          </tr>
+
+          <!-- PEAK-CHARGE -->
+          <tr>
+            <td>
+              <a href="https://github.com/aaf091/peak-charge" target="_blank">
+                <div class="proj-name">PEAK-CHARGE</div>
+                <div style="font-size:9px;color:var(--cyan);margin-top:2px;">AI/ML · AGENTS</div>
+              </a>
+            </td>
+            <td><span class="proj-lang">PY · SKLEARN</span></td>
+            <td><span class="proj-status live">● LIVE</span></td>
+            <td>
+              <div class="proj-desc">EV demand prediction system on 40,179 NREL workplace charging sessions. Random Forest classifier (AUC 0.87, recall 92.7%) with TimeSeriesSplit preventing data leakage. Two agentic systems: real-time session monitoring agent and model maintenance agent with drift detection, auto-retraining, and JSONL audit trail.</div>
+              <div class="tag-row"><span class="bbg-tag o">RANDOM FOREST</span><span class="bbg-tag g">AUC 0.87</span><span class="bbg-tag c">AGENTIC</span><span class="bbg-tag">DRIFT DETECTION</span><span class="bbg-tag">TIMESERIESSPLIT</span><span class="bbg-tag">NREL DATASET</span></div>
+            </td>
+          </tr>
+
+          <!-- TRIAGE AI -->
+          <tr>
+            <td>
+              <div class="proj-name">TRIAGE AI</div>
+              <div style="font-size:9px;color:var(--cyan);margin-top:2px;">AI/HEALTH</div>
+            </td>
+            <td><span class="proj-lang">PY · FASTAPI</span></td>
+            <td><span class="proj-status featured">◆ RESEARCH</span></td>
+            <td>
+              <div class="proj-desc">Agentic ED triage prioritization system. Ingests real-time patient vitals and chief complaint to autonomously assign Emergency Severity Index (ESI) scores, flag high-risk patients for escalation, and draft structured SOAP-format clinical summaries. Validated against MIMIC-IV-ED dataset (Beth Israel Deaconess, 2008–2022). Human-in-the-loop: ESI 1-2 require nurse confirmation, all overrides logged.</div>
+              <div class="tag-row"><span class="bbg-tag o">CLAUDE API</span><span class="bbg-tag c">MIMIC-IV-ED</span><span class="bbg-tag">ESI SCORING</span><span class="bbg-tag">AGENTIC</span><span class="bbg-tag">FASTAPI</span><span class="bbg-tag o">HUMAN-IN-LOOP</span></div>
+            </td>
+          </tr>
+
+          <!-- LOGFLOW -->
           <tr>
             <td>
               <a href="https://github.com/aaf091/logflow" target="_blank">
                 <div class="proj-name">LOGFLOW ★</div>
-                <div style="font-size:9px;color:var(--yellow);margin-top:2px;">FEATURED · NEW</div>
+                <div style="font-size:9px;color:var(--yellow);margin-top:2px;">FEATURED · SYSTEMS</div>
               </a>
             </td>
             <td><span class="proj-lang">RUST · GO</span></td>
             <td><span class="proj-status live">● LIVE</span></td>
             <td>
-              <div class="proj-desc">High-performance distributed log aggregation pipeline. Rust agent tails files, parses JSON/plaintext, batches and ships via gRPC + protobuf to Go aggregation server. SQLite persistence, real-time web dashboard.</div>
+              <div class="proj-desc">High-performance distributed log aggregation pipeline. Rust agent tails files with backpressure, parses JSON/plaintext, batches and ships via gRPC + protobuf to Go aggregation server with retry/backoff and zero data loss. REST API with filtering, indexed SQLite persistence, real-time web dashboard. Fully containerized.</div>
               <div class="tag-row"><span class="bbg-tag o">RUST</span><span class="bbg-tag o">GO</span><span class="bbg-tag c">gRPC</span><span class="bbg-tag c">PROTOBUF</span><span class="bbg-tag">TOKIO</span><span class="bbg-tag">SQLITE</span><span class="bbg-tag">DOCKER</span></div>
             </td>
           </tr>
+
+          <!-- QUANTLAB -->
           <tr>
             <td>
               <a href="https://github.com/aaf091/QuantLab" target="_blank">
@@ -494,18 +628,22 @@
             <td><span class="proj-status live">● LIVE</span></td>
             <td>
               <div class="proj-desc">Bloomberg Terminal-style quantitative finance platform. Flask REST API with 350k+ instrument SQLite database, 11 live quant analysis modules (Markowitz optimizer, Monte Carlo options pricer, pairs trading, VaR, ML price predictor), interactive OHLCV candlestick charts, sector heatmap, correlation matrix, and 6 draggable floating panels.</div>
-              <div class="tag-row"><span class="bbg-tag o">FLASK</span><span class="bbg-tag c">REACT</span><span class="bbg-tag c">TYPESCRIPT</span><span class="bbg-tag">SQLITE</span><span class="bbg-tag">SQLALCHEMY</span><span class="bbg-tag">SCIKIT-LEARN</span><span class="bbg-tag">YFINANCE</span><span class="bbg-tag o">350K+ INSTRUMENTS</span><span class="bbg-tag g">11 QUANT MODULES</span></div>
+              <div class="tag-row"><span class="bbg-tag o">FLASK</span><span class="bbg-tag c">REACT</span><span class="bbg-tag c">TYPESCRIPT</span><span class="bbg-tag">SQLITE</span><span class="bbg-tag">SCIKIT-LEARN</span><span class="bbg-tag o">350K+ INSTRUMENTS</span><span class="bbg-tag g">11 QUANT MODULES</span></div>
             </td>
           </tr>
+
+          <!-- AI EMAIL SAAS -->
           <tr>
             <td><div class="proj-name">AI EMAIL SAAS</div></td>
             <td><span class="proj-lang">PY · TS · K8S</span></td>
             <td><span class="proj-status live">● LIVE</span></td>
             <td>
               <div class="proj-desc">Production microservices platform on AWS EKS — 4 independently scalable services. Real-time Gmail/Outlook sync, vector semantic search, RAG-powered AI email drafting with streaming responses.</div>
-              <div class="tag-row"><span class="bbg-tag o">AWS EKS</span><span class="bbg-tag">FASTAPI</span><span class="bbg-tag c">NEXT.JS</span><span class="bbg-tag">POSTGRESQL</span><span class="bbg-tag">OPENAI</span><span class="bbg-tag">KUBERNETES</span></div>
+              <div class="tag-row"><span class="bbg-tag o">AWS EKS</span><span class="bbg-tag">FASTAPI</span><span class="bbg-tag c">NEXT.JS</span><span class="bbg-tag">POSTGRESQL</span><span class="bbg-tag c">RAG</span><span class="bbg-tag">KUBERNETES</span></div>
             </td>
           </tr>
+
+          <!-- GPT-2 KERNEL FUSION -->
           <tr>
             <td><div class="proj-name">GPT-2 KERNEL FUSION</div></td>
             <td><span class="proj-lang">CUDA · TRITON</span></td>
@@ -515,6 +653,8 @@
               <div class="tag-row"><span class="bbg-tag o">CUDA</span><span class="bbg-tag o">TRITON</span><span class="bbg-tag c">PYTORCH</span><span class="bbg-tag">A100</span><span class="bbg-tag">NSIGHT</span></div>
             </td>
           </tr>
+
+          <!-- LIFE CONTEXT API -->
           <tr>
             <td><div class="proj-name">LIFE CONTEXT API</div></td>
             <td><span class="proj-lang">PY · AWS</span></td>
@@ -524,8 +664,12 @@
               <div class="tag-row"><span class="bbg-tag">WHISPER</span><span class="bbg-tag">FASTAPI</span><span class="bbg-tag">POSTGRESQL</span><span class="bbg-tag c">AWS</span><span class="bbg-tag">LIBROSA</span></div>
             </td>
           </tr>
+
+          <!-- AUTOTRUST -->
           <tr>
-            <td><div class="proj-name">AUTOTRUST <span style="color:var(--yellow)">★</span></div></td>
+            <td>
+              <div class="proj-name">AUTOTRUST <span style="color:var(--yellow)">★</span></div>
+            </td>
             <td><span class="proj-lang">SOLANA · TS</span></td>
             <td><span class="proj-status featured">◆ WINNER</span></td>
             <td>
@@ -533,6 +677,8 @@
               <div class="tag-row"><span class="bbg-tag o">SOLANA</span><span class="bbg-tag c">REACT</span><span class="bbg-tag c">NEXT.JS</span><span class="bbg-tag g">HACKNYU WINNER</span></div>
             </td>
           </tr>
+
+          <!-- HW SECURITY -->
           <tr>
             <td><div class="proj-name">HW SECURITY</div></td>
             <td><span class="proj-lang">C · ARM · PY</span></td>
@@ -542,6 +688,7 @@
               <div class="tag-row"><span class="bbg-tag o">DPA</span><span class="bbg-tag">ARM</span><span class="bbg-tag">GDB</span><span class="bbg-tag">OPENOCD</span><span class="bbg-tag">AES-256</span></div>
             </td>
           </tr>
+
         </tbody>
       </table>
     </div>
@@ -607,8 +754,12 @@
         <div class="skill-pills"><span class="skill-chip">SPRING BOOT</span><span class="skill-chip">FASTAPI</span><span class="skill-chip">NEXT.JS</span><span class="skill-chip">REACT</span><span class="skill-chip">GRPC</span><span class="skill-chip">KAFKA</span><span class="skill-chip">TRPC</span><span class="skill-chip">DJANGO</span></div>
       </div>
       <div class="skill-category">
-        <div class="skill-cat-label">DATA & ML</div>
-        <div class="skill-pills"><span class="skill-chip">POSTGRESQL</span><span class="skill-chip">MONGODB</span><span class="skill-chip">REDIS</span><span class="skill-chip">OPENSEARCH</span><span class="skill-chip">PYTORCH</span><span class="skill-chip">TENSORFLOW</span><span class="skill-chip">RAG</span><span class="skill-chip">WHISPER</span></div>
+        <div class="skill-cat-label">AI & ML</div>
+        <div class="skill-pills"><span class="skill-chip">PYTORCH</span><span class="skill-chip">XGBOOST</span><span class="skill-chip">SCIKIT-LEARN</span><span class="skill-chip">SHAP</span><span class="skill-chip">RAG</span><span class="skill-chip">WHISPER</span><span class="skill-chip">CLAUDE API</span><span class="skill-chip">GROQ</span></div>
+      </div>
+      <div class="skill-category">
+        <div class="skill-cat-label">DATA</div>
+        <div class="skill-pills"><span class="skill-chip">POSTGRESQL</span><span class="skill-chip">MONGODB</span><span class="skill-chip">REDIS</span><span class="skill-chip">OPENSEARCH</span><span class="skill-chip">PINECONE</span><span class="skill-chip">KAFKA</span><span class="skill-chip">SQLITE</span></div>
       </div>
       <div class="skill-category">
         <div class="skill-cat-label">GPU & PERFORMANCE</div>
@@ -616,7 +767,7 @@
       </div>
       <div class="skill-category">
         <div class="skill-cat-label">SYSTEMS</div>
-        <div class="skill-pills"><span class="skill-chip">TOKIO</span><span class="skill-chip">TONIC</span><span class="skill-chip">PROTOBUF</span><span class="skill-chip">MICROSERVICES</span><span class="skill-chip">EVENT-DRIVEN</span><span class="skill-chip">PRISMA</span></div>
+        <div class="skill-pills"><span class="skill-chip">TOKIO</span><span class="skill-chip">TONIC</span><span class="skill-chip">PROTOBUF</span><span class="skill-chip">MICROSERVICES</span><span class="skill-chip">EVENT-DRIVEN</span><span class="skill-chip">ZERO-COPY I/O</span></div>
       </div>
     </div>
   </div>
@@ -675,7 +826,7 @@
   <span class="bottom-item"><span class="bottom-key">F4</span> SKILLS</span>
   <span class="bottom-item"><span class="bottom-key">F5</span> EDUCATION</span>
   <span class="bottom-item"><span class="bottom-key">F8</span> CONTACT</span>
-  <span style="margin-left:auto;font-size:10px;letter-spacing:0.06em;">AADIT FADIA PORTFOLIO TERMINAL v1.0 · NYC · MAY 2026</span>
+  <span style="margin-left:auto;font-size:10px;letter-spacing:0.06em;">AADIT FADIA PORTFOLIO TERMINAL v2.0 · NYC · MAY 2026</span>
 </div>
 
 <script>
@@ -687,7 +838,6 @@
   setInterval(updateClock, 1000);
   updateClock();
 
-  // Scroll reveal
   const reveals = document.querySelectorAll('.reveal');
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry, i) => {
@@ -698,21 +848,6 @@
     });
   }, { threshold: 0.05 });
   reveals.forEach(el => observer.observe(el));
-
-//   // Scrolling ticker
-//   const ticker = document.getElementById('ticker');
-//   const origHTML = ticker.innerHTML;
-//   ticker.innerHTML = origHTML + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + origHTML;
-//   let pos = 0;
-//   let tickerHalfWidth = null;
-//   function scrollTicker() {
-//     if (!tickerHalfWidth) tickerHalfWidth = ticker.scrollWidth / 2;
-//     pos -= 0.6;
-//     if (Math.abs(pos) >= tickerHalfWidth) pos = 0;
-//     ticker.style.left = pos + 'px';
-//     requestAnimationFrame(scrollTicker);
-//   }
-//   scrollTicker();
 </script>
 </body>
 </html>
