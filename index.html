@@ -543,14 +543,14 @@
             <td>
               <a href="https://github.com/aaf091/conduit" target="_blank">
                 <div class="proj-name">CONDUIT ★</div>
-                <div style="font-size:9px;color:var(--yellow);margin-top:2px;">FEATURED · SYSTEMS</div>
+                <div style="font-size:9px;color:var(--cyan);margin-top:2px;">IN DEV · SYSTEMS</div>
               </a>
             </td>
             <td><span class="proj-lang">GO</span></td>
-            <td><span class="proj-status live">● LIVE</span></td>
+            <td><span class="proj-status" style="color:var(--cyan)">⟳ IN DEV · P2</span></td>
             <td>
-              <div class="proj-desc">Kafka-inspired distributed message broker built from scratch in Go. Custom binary wire protocol, persistent partitioned append-only log, consumer group coordination with heartbeat-driven rebalancing, zero-copy fetch via sendfile(2), idempotent producer semantics — zero external dependencies. Ships an intelligent consumer agent powered by Claude: subscribes to an input topic, reasons over messages with a sliding context window, produces structured JSON decisions downstream.</div>
-              <div class="tag-row"><span class="bbg-tag o">GO</span><span class="bbg-tag c">BINARY PROTOCOL</span><span class="bbg-tag c">CONSUMER GROUPS</span><span class="bbg-tag">SENDFILE(2)</span><span class="bbg-tag">IDEMPOTENT</span><span class="bbg-tag c">CLAUDE API</span><span class="bbg-tag">DOCKER</span></div>
+              <div class="proj-desc">Kafka-inspired distributed message broker built from scratch in Go — zero external dependencies. Phase 1 delivered a durable, CRC32-validated partitioned append-only log with segment rolling and sparse offset index. Phase 2 delivered a custom binary wire protocol and TCP broker server routing produce/fetch/offset-commit requests to the partition log — 8 tests passing across partition, broker, and protocol packages. Consumer groups, replication, zero-copy fetch, and intelligent consumer agent (Claude API) in pipeline.</div>
+              <div class="tag-row"><span class="bbg-tag o">GO</span><span class="bbg-tag c">BINARY PROTOCOL</span><span class="bbg-tag c">APPEND-ONLY LOG</span><span class="bbg-tag">TCP BROKER</span><span class="bbg-tag g">8 TESTS PASSING</span><span class="bbg-tag">DOCKER</span></div>
             </td>
           </tr>
 
@@ -559,14 +559,14 @@
             <td>
               <a href="https://github.com/aaf091/lexagent" target="_blank">
                 <div class="proj-name">LEXAGENT ★</div>
-                <div style="font-size:9px;color:var(--yellow);margin-top:2px;">FEATURED · AI/LEGAL</div>
+                <div style="font-size:9px;color:var(--cyan);margin-top:2px;">IN DEV · AI/LEGAL</div>
               </a>
             </td>
             <td><span class="proj-lang">PY · FASTAPI</span></td>
-            <td><span class="proj-status featured">◆ RESEARCH</span></td>
+            <td><span class="proj-status" style="color:var(--cyan)">⟳ IN DEV · P2</span></td>
             <td>
-              <div class="proj-desc">AI-powered contract analysis platform for M&A and legal due diligence. Four-stage pipeline: chunk → trie pre-screen → RAG context retrieval (Pinecone + US Constitutional/statutory corpus) → Claude-powered risk scoring. Outputs structured RiskFlag objects with severity levels cross-referenced against constitutional provisions and federal statutes. Interactive QA bot layer for natural-language contract queries.</div>
-              <div class="tag-row"><span class="bbg-tag o">CLAUDE API</span><span class="bbg-tag c">RAG</span><span class="bbg-tag c">PINECONE</span><span class="bbg-tag">FASTAPI</span><span class="bbg-tag">NLP</span><span class="bbg-tag o">M&A</span><span class="bbg-tag o">CONTRACT ANALYSIS</span></div>
+              <div class="proj-desc">AI-powered contract analysis platform for M&A and legal due diligence. Phase 1 delivered the full PRD, system architecture, and core data models (Contract, Clause, DealRoom, AnalysisReport). Phase 2 delivered the corpus ingestion pipeline: loaders for US Constitution, federal statutes, and M&A contract documents; clause chunker producing structured .jsonl output; trie-based legal term pre-screener. Pinecone embedding, Claude-powered risk scoring, and QA bot in pipeline.</div>
+              <div class="tag-row"><span class="bbg-tag o">CLAUDE API</span><span class="bbg-tag c">RAG</span><span class="bbg-tag c">PINECONE</span><span class="bbg-tag">TRIE PRE-SCREEN</span><span class="bbg-tag o">M&A</span><span class="bbg-tag o">CONTRACT ANALYSIS</span><span class="bbg-tag">FASTAPI</span></div>
             </td>
           </tr>
 
@@ -590,13 +590,13 @@
           <tr>
             <td>
               <div class="proj-name">TRIAGE AI</div>
-              <div style="font-size:9px;color:var(--cyan);margin-top:2px;">AI/HEALTH</div>
+              <div style="font-size:9px;color:var(--cyan);margin-top:2px;">IN DEV · AI/HEALTH</div>
             </td>
             <td><span class="proj-lang">PY · FASTAPI</span></td>
-            <td><span class="proj-status featured">◆ RESEARCH</span></td>
+            <td><span class="proj-status" style="color:var(--cyan)">⟳ IN DEV · P2</span></td>
             <td>
-              <div class="proj-desc">Agentic ED triage prioritization system. Ingests real-time patient vitals and chief complaint to autonomously assign Emergency Severity Index (ESI) scores, flag high-risk patients for escalation, and draft structured SOAP-format clinical summaries. Validated against MIMIC-IV-ED dataset (Beth Israel Deaconess, 2008–2022). Human-in-the-loop: ESI 1-2 require nurse confirmation, all overrides logged.</div>
-              <div class="tag-row"><span class="bbg-tag o">CLAUDE API</span><span class="bbg-tag c">MIMIC-IV-ED</span><span class="bbg-tag">ESI SCORING</span><span class="bbg-tag">AGENTIC</span><span class="bbg-tag">FASTAPI</span><span class="bbg-tag o">HUMAN-IN-LOOP</span></div>
+              <div class="proj-desc">Agentic ED triage prioritization system for emergency departments. Phase 1 delivered full PRD and system architecture. Phase 2 defined the 6-step agent workflow (ingest → ESI score → flag → route → document → monitor) and human-in-the-loop design: ESI 1-2 always require nurse confirmation, one-click override on all decisions, full audit log. Target: MIMIC-IV-ED dataset (Beth Israel Deaconess, 2008–2022). ESI scoring logic, SOAP note generation, and FastAPI backend in pipeline.</div>
+              <div class="tag-row"><span class="bbg-tag o">CLAUDE API</span><span class="bbg-tag c">MIMIC-IV-ED</span><span class="bbg-tag">ESI SCORING</span><span class="bbg-tag">AGENTIC</span><span class="bbg-tag o">HUMAN-IN-LOOP</span><span class="bbg-tag">FASTAPI</span></div>
             </td>
           </tr>
 
