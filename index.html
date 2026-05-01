@@ -186,7 +186,6 @@
 
     .panel-cmd { font-size: 10px; color: var(--gray-dim); margin-left: auto; letter-spacing: 0.06em; }
 
-    /* ── Photo + name row ── */
     .hero-identity {
       display: flex;
       align-items: flex-start;
@@ -202,11 +201,9 @@
       object-fit: cover;
       object-position: center top;
       flex-shrink: 0;
-      /* orange tint via CSS filter — remove if you prefer natural colour */
       filter: grayscale(20%) sepia(20%) saturate(120%);
     }
 
-    /* Fallback placeholder shown when no photo is provided */
     .hero-avatar-placeholder {
       width: 82px;
       height: 82px;
@@ -387,6 +384,14 @@
     .section-full { padding: 20px 24px; }
     .proj-panel { padding: 20px 24px; }
 
+    /* ── Calendly ── */
+    .calendly-wrap {
+      padding: 0 0 4px 0;
+    }
+    .calendly-inline-widget {
+      border: 1px solid var(--border-dim);
+    }
+
     .bottombar {
       position: fixed;
       bottom: 0; left: 0; right: 0;
@@ -433,6 +438,7 @@
   <a href="#skills" class="func-key"><span class="fnum">F4</span>SKILLS</a>
   <a href="#education" class="func-key"><span class="fnum">F5</span>EDUCATION</a>
   <a href="#contact" class="func-key"><span class="fnum">F8</span>CONTACT</a>
+  <a href="#schedule" class="func-key"><span class="fnum">F9</span>SCHEDULE</a>
   <div class="func-spacer"></div>
   <div class="func-status">
     <span><span class="status-dot"></span> LIVE</span>
@@ -450,7 +456,6 @@
         <span class="panel-cmd">EQUITY &lt;GO&gt;</span>
       </div>
 
-      <!-- PHOTO + NAME ROW -->
       <div class="hero-identity">
         <!--
           TO ADD YOUR PHOTO:
@@ -482,6 +487,7 @@
         <a href="https://www.linkedin.com/in/aadit-anand-fadia" target="_blank" class="bbg-btn">LINKEDIN</a>
         <a href="mailto:aaf9407@nyu.edu" class="bbg-btn">EMAIL</a>
         <a href="tel:+19296150362" class="bbg-btn">+1 929 615 0362</a>
+        <a href="#schedule" class="bbg-btn primary">SCHEDULE MEETING</a>
       </div>
     </div>
 
@@ -522,7 +528,6 @@
         </thead>
         <tbody>
 
-          <!-- PAY-WATCH -->
           <tr>
             <td>
               <a href="https://github.com/aaf091/pay-watch" target="_blank">
@@ -538,7 +543,6 @@
             </td>
           </tr>
 
-          <!-- CONDUIT -->
           <tr>
             <td>
               <a href="https://github.com/aaf091/conduit" target="_blank">
@@ -554,7 +558,6 @@
             </td>
           </tr>
 
-          <!-- LEXAGENT -->
           <tr>
             <td>
               <a href="https://github.com/aaf091/lexagent" target="_blank">
@@ -570,7 +573,6 @@
             </td>
           </tr>
 
-          <!-- PEAK-CHARGE -->
           <tr>
             <td>
               <a href="https://github.com/aaf091/peak-charge" target="_blank">
@@ -586,7 +588,6 @@
             </td>
           </tr>
 
-          <!-- TRIAGE AI -->
           <tr>
             <td>
               <div class="proj-name">TRIAGE AI</div>
@@ -600,7 +601,6 @@
             </td>
           </tr>
 
-          <!-- LOGFLOW -->
           <tr>
             <td>
               <a href="https://github.com/aaf091/logflow" target="_blank">
@@ -616,7 +616,6 @@
             </td>
           </tr>
 
-          <!-- QUANTLAB -->
           <tr>
             <td>
               <a href="https://github.com/aaf091/QuantLab" target="_blank">
@@ -632,7 +631,6 @@
             </td>
           </tr>
 
-          <!-- AI EMAIL SAAS -->
           <tr>
             <td><div class="proj-name">AI EMAIL SAAS</div></td>
             <td><span class="proj-lang">PY · TS · K8S</span></td>
@@ -643,7 +641,6 @@
             </td>
           </tr>
 
-          <!-- GPT-2 KERNEL FUSION -->
           <tr>
             <td><div class="proj-name">GPT-2 KERNEL FUSION</div></td>
             <td><span class="proj-lang">CUDA · TRITON</span></td>
@@ -654,7 +651,6 @@
             </td>
           </tr>
 
-          <!-- LIFE CONTEXT API -->
           <tr>
             <td><div class="proj-name">LIFE CONTEXT API</div></td>
             <td><span class="proj-lang">PY · AWS</span></td>
@@ -665,7 +661,6 @@
             </td>
           </tr>
 
-          <!-- AUTOTRUST -->
           <tr>
             <td>
               <div class="proj-name">AUTOTRUST <span style="color:var(--yellow)">★</span></div>
@@ -678,7 +673,6 @@
             </td>
           </tr>
 
-          <!-- HW SECURITY -->
           <tr>
             <td><div class="proj-name">HW SECURITY</div></td>
             <td><span class="proj-lang">C · ARM · PY</span></td>
@@ -818,6 +812,20 @@
     </div>
   </div>
 
+  <!-- SCHEDULE / CALENDLY -->
+  <div id="schedule" class="section-row full">
+    <div class="section-full reveal">
+      <div class="panel-header">
+        <span class="panel-title">SCHEDULE A MEETING</span>
+        <span class="panel-cmd">CAL &lt;GO&gt;</span>
+      </div>
+      <div class="calendly-wrap">
+        <div class="calendly-inline-widget" data-url="https://calendly.com/aaf9407-nyu/30min" style="min-width:320px;height:700px;"></div>
+        <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <div class="bottombar">
@@ -826,6 +834,7 @@
   <span class="bottom-item"><span class="bottom-key">F4</span> SKILLS</span>
   <span class="bottom-item"><span class="bottom-key">F5</span> EDUCATION</span>
   <span class="bottom-item"><span class="bottom-key">F8</span> CONTACT</span>
+  <span class="bottom-item"><span class="bottom-key">F9</span> SCHEDULE</span>
   <span style="margin-left:auto;font-size:10px;letter-spacing:0.06em;">AADIT FADIA PORTFOLIO TERMINAL v2.0 · NYC · MAY 2026</span>
 </div>
 
