@@ -85,6 +85,9 @@ body {
 a { text-decoration: none; color: inherit; }
 code, .mono { font-family: 'JetBrains Mono', monospace; }
 
+/* Content layers above canvas */
+nav, .hero, section, footer { position: relative; z-index: 1; }
+
 /* ─── NAV ─── */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
@@ -386,6 +389,13 @@ footer {
 .footer-link { font-size: 11px; color: var(--gray2); transition: color 0.15s; }
 .footer-link:hover { color: var(--cyan); }
 
+/* ─── PARTICLE CANVAS ─── */
+#particle-canvas {
+  position: fixed; inset: 0; z-index: 0;
+  pointer-events: none;
+  opacity: 1;
+}
+
 /* ─── ANIMATIONS ─── */
 .fade-up {
   opacity: 0; transform: translateY(20px);
@@ -409,6 +419,9 @@ footer {
   .hero-name { letter-spacing: -0.02em; }
 }
 </style>
+
+<!-- PARTICLE CANVAS -->
+<canvas id="particle-canvas"></canvas>
 
 <!-- NAV -->
 <nav>
@@ -895,17 +908,189 @@ footer {
 </footer>
 
 <script>
-  // Scroll-triggered fade-in
-  const fadeEls = document.querySelectorAll('.fade-up');
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((e, i) => {
-      if (e.isIntersecting) {
-        const siblings = Array.from(e.target.parentElement.children).filter(c => c.classList.contains('fade-up'));
-        const idx = siblings.indexOf(e.target);
-        setTimeout(() => e.target.classList.add('visible'), idx * 60);
-        io.unobserve(e.target);
+/* ─── SCROLL REVEAL ─── */
+const fadeEls = document.querySelectorAll('.fade-up');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach((e) => {
+    if (e.isIntersecting) {
+      const siblings = Array.from(e.target.parentElement.children).filter(c => c.classList.contains('fade-up'));
+      const idx = siblings.indexOf(e.target);
+      setTimeout(() => e.target.classList.add('visible'), idx * 60);
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08 });
+fadeEls.forEach(el => io.observe(el));
+
+/* ─── PARTICLE PHYSICS ─── */
+(function() {
+  const canvas = document.getElementById('particle-canvas');
+  const ctx = canvas.getContext('2d');
+
+  // Config
+  const COUNT       = 90;
+  const MAX_DIST    = 130;   // connection draw distance
+  const MOUSE_REPEL = 120;   // repulsion radius
+  const REPEL_FORCE = 0.45;  // how hard particles flee
+  const ATTRACT_FORCE = 0.004; // gentle drift back to center
+  const SPEED       = 0.35;
+  const PARTICLE_R  = 1.8;
+  const CYAN        = [0, 212, 255];
+  const PURPLE      = [120, 80, 255];
+
+  let W, H, dpr;
+  const mouse = { x: -9999, y: -9999, active: false };
+  let particles = [];
+  let raf;
+
+  function resize() {
+    dpr = window.devicePixelRatio || 1;
+    W = window.innerWidth;
+    H = window.innerHeight;
+    canvas.width  = W * dpr;
+    canvas.height = H * dpr;
+    canvas.style.width  = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.scale(dpr, dpr);
+  }
+
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  function colorAt(x) {
+    // shift from cyan on left to purple on right
+    const t = Math.max(0, Math.min(1, x / W));
+    return [
+      Math.round(lerp(CYAN[0], PURPLE[0], t)),
+      Math.round(lerp(CYAN[1], PURPLE[1], t)),
+      Math.round(lerp(CYAN[2], PURPLE[2], t)),
+    ];
+  }
+
+  function makeParticle() {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = (Math.random() * 0.6 + 0.2) * SPEED;
+    return {
+      x:  Math.random() * W,
+      y:  Math.random() * H,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      r:  PARTICLE_R * (0.6 + Math.random() * 0.8),
+      // tiny wobble phase
+      phase: Math.random() * Math.PI * 2,
+      phaseSpeed: (Math.random() - 0.5) * 0.01,
+    };
+  }
+
+  function init() {
+    resize();
+    particles = Array.from({ length: COUNT }, makeParticle);
+  }
+
+  function tick() {
+    ctx.clearRect(0, 0, W, H);
+
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+
+      // Wobble
+      p.phase += p.phaseSpeed;
+      p.vx += Math.sin(p.phase) * 0.003;
+      p.vy += Math.cos(p.phase) * 0.003;
+
+      // Mouse repulsion
+      const dx = p.x - mouse.x;
+      const dy = p.y - mouse.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < MOUSE_REPEL && dist > 0.5) {
+        const force = (1 - dist / MOUSE_REPEL) * REPEL_FORCE;
+        p.vx += (dx / dist) * force;
+        p.vy += (dy / dist) * force;
       }
-    });
-  }, { threshold: 0.08 });
-  fadeEls.forEach(el => io.observe(el));
+
+      // Very gentle center gravity (keeps particles on screen)
+      p.vx += (W * 0.5 - p.x) * ATTRACT_FORCE * 0.001;
+      p.vy += (H * 0.5 - p.y) * ATTRACT_FORCE * 0.001;
+
+      // Dampen velocity
+      p.vx *= 0.98;
+      p.vy *= 0.98;
+
+      // Speed cap
+      const spd = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+      if (spd > 2.2) { p.vx = (p.vx / spd) * 2.2; p.vy = (p.vy / spd) * 2.2; }
+
+      // Move
+      p.x += p.vx;
+      p.y += p.vy;
+
+      // Wrap edges
+      if (p.x < -20) p.x = W + 20;
+      if (p.x > W + 20) p.x = -20;
+      if (p.y < -20) p.y = H + 20;
+      if (p.y > H + 20) p.y = -20;
+
+      // Draw particle
+      const [r, g, b] = colorAt(p.x);
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${r},${g},${b},0.85)`;
+      ctx.fill();
+
+      // Draw connections
+      for (let j = i + 1; j < particles.length; j++) {
+        const q = particles[j];
+        const ex = p.x - q.x;
+        const ey = p.y - q.y;
+        const d  = Math.sqrt(ex * ex + ey * ey);
+        if (d < MAX_DIST) {
+          const alpha = (1 - d / MAX_DIST) * 0.35;
+          // blend color from midpoint
+          const mx = (p.x + q.x) / 2;
+          const [lr, lg, lb] = colorAt(mx);
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(q.x, q.y);
+          ctx.strokeStyle = `rgba(${lr},${lg},${lb},${alpha})`;
+          ctx.lineWidth = 0.8;
+          ctx.stroke();
+        }
+      }
+
+      // Mouse proximity glow — draw bright ring around closest particles
+      if (mouse.active && dist < MOUSE_REPEL * 1.4) {
+        const glowAlpha = (1 - dist / (MOUSE_REPEL * 1.4)) * 0.5;
+        const [lr, lg, lb] = colorAt(p.x);
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r * 3, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${lr},${lg},${lb},${glowAlpha})`;
+        ctx.fill();
+      }
+    }
+
+    raf = requestAnimationFrame(tick);
+  }
+
+  // Mouse / touch tracking
+  function onMove(e) {
+    const touch = e.touches ? e.touches[0] : e;
+    mouse.x = touch.clientX;
+    mouse.y = touch.clientY;
+    mouse.active = true;
+  }
+  function onLeave() { mouse.active = false; mouse.x = -9999; mouse.y = -9999; }
+
+  window.addEventListener('mousemove', onMove, { passive: true });
+  window.addEventListener('touchmove', onMove, { passive: true });
+  window.addEventListener('mouseleave', onLeave);
+  window.addEventListener('touchend', onLeave);
+  window.addEventListener('resize', () => { cancelAnimationFrame(raf); resize(); tick(); });
+
+  // Reduce motion: skip canvas entirely
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    canvas.style.display = 'none';
+  } else {
+    init();
+    tick();
+  }
+})();
 </script>
